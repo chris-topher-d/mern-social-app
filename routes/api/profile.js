@@ -208,4 +208,56 @@ router.post('/education', passport.authenticate('jwt', { session: false }), (req
     });
 });
 
+// @route  DELETE api/profile/experience/:id
+// @desc   Delete experience from profile
+// @access Private
+router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.user.id })
+    .then(profile => {
+      // Get remove index
+      const experiences = profile.experience.map(item => item.id);
+
+      if (!experiences.includes(req.params.exp_id)) {
+        errors.noexperience = 'The experience was not found for this profile';
+        return res.status(404).json(errors);
+      }
+
+      const removeIndex = experiences.indexOf(req.params.exp_id);
+
+      // Splice out of array
+      profile.experience.splice(removeIndex, 1);
+
+      profile.save().then(profile => res.json(profile));
+  })
+  .catch(err => res.status(404).json(err));
+});
+
+// @route  DELETE api/profile/education/:id
+// @desc   Delete education from profile
+// @access Private
+router.delete('/education/:edu_id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.user.id })
+    .then(profile => {
+      // Get remove index
+      const education = profile.education.map(item => item.id);
+
+      if (!education.includes(req.params.edu_id)) {
+        errors.noeducation = 'The education was not found for this profile';
+        return res.status(404).json(errors);
+      }
+
+      const removeIndex = education.indexOf(req.params.edu_id);
+
+      // Splice out of array
+      profile.education.splice(removeIndex, 1);
+
+      profile.save().then(profile => res.json(profile));
+  })
+  .catch(err => res.status(404).json(err));
+});
+
 module.exports = router;
