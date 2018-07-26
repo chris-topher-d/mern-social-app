@@ -230,8 +230,8 @@ router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: fal
       profile.experience.splice(removeIndex, 1);
 
       profile.save().then(profile => res.json(profile));
-  })
-  .catch(err => res.status(404).json(err));
+    })
+    .catch(err => res.status(404).json(err));
 });
 
 // @route  DELETE api/profile/education/:id
@@ -256,8 +256,22 @@ router.delete('/education/:edu_id', passport.authenticate('jwt', { session: fals
       profile.education.splice(removeIndex, 1);
 
       profile.save().then(profile => res.json(profile));
-  })
-  .catch(err => res.status(404).json(err));
+    })
+    .catch(err => res.status(404).json(err));
+});
+
+// @route  DELETE api/profile
+// @desc   Delete user and profile
+// @access Private
+router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+
+  Profile.findOneAndRemove({ user: req.user.id })
+    .then(() => {
+      User.findOneAndRemove({ _id: req.user.id })
+        .then(() => res.json({ success: true }));
+    })
+    .catch(err => res.status(404).json(err));
 });
 
 module.exports = router;
