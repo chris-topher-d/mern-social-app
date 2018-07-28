@@ -130,6 +130,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false}), (re
 
       // Add to comments array
       post.comments.unshift(newComment);
+      
       post.save().then(post => res.json(post));
     })
     .catch(err => res.status(404).json({ postnotfound: 'No post found with that ID'}));
@@ -156,7 +157,8 @@ router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', { session
       }
 
       // Remove comment from array
-      post.comments = post.comments.filter(comment => comment._id.toString() !== req.params.comment_id);
+      post.comments.splice(removeIndex, 1);
+
       post.save().then(post => res.json(post));
     })
     .catch(err => res.status(404).json({ postnotfound: 'No comment found with that ID'}));
