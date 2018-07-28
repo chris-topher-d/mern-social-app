@@ -74,4 +74,40 @@ router.delete('/:id', passport.authenticate('jwt', { session: false}), (req, res
     .catch(err => res.status(404).json({ error: 'Unable to delete post'}))
 });
 
+// @route  POST api/posts/like/:id
+// @desc   Like post
+// @access Private
+router.post('/like/:id', passport.authenticate('jwt', { session: false}), (req, res) => {
+  Post.findOne({ _id: req.params.id })
+    .then(post => {
+      if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+        return res.status(400).json({ alreadyliked: 'User has already liked this post'});
+      }
+
+      // Add user ID to likes array
+      post.likes.unshift({ user: req.user.id });
+
+      post.save().then(post => res.json(post));
+    })
+    .catch(err => res.status(404).json({ error: 'Unable to find post ID'}));
+});
+
+// @route  POST api/posts/unlike/:id
+// @desc   Unlike post
+// @access Private
+router.post('/unlike/:id', passport.authenticate('jwt', { session: false}), (req, res) => {
+  Post.findOne({ _id: req.params.id })
+    .then(post => {
+      if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+        return res.status(400).json({ alreadyliked: 'You have not liked this post yet'});
+      }
+
+      // Remove like from likes array
+      post.likes = post.likes.filter(like => like.user.toString() !== req.user.id);
+
+      post.save().then(post => res.json(post));
+    })
+    .catch(err => res.status(404).json({ error: 'Unable to find post ID'}));
+});
+
 module.exports = router;
