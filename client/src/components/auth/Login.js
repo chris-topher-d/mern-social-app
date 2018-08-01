@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import classnames from 'classnames';
 import { loginUser } from '../../actions/authActions';
 
@@ -28,6 +29,12 @@ class Login extends Component {
   //     return null;
   //   }
 
+  // componentDidMount() {
+  //   if (this.props.auth.isAuthenticated) {
+  //     this.props.history.push('/dashboard');
+  //   }
+  // }
+
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
@@ -54,6 +61,10 @@ class Login extends Component {
   }
 
   render() {
+    if (this.props.auth.isAuthenticated) {
+      return <Redirect to='/dashboard' />;
+    }
+
     const { errors } = this.state;
 
     return (
