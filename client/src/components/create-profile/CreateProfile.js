@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
+import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
+import InputGroup from '../common/InputGroup';
+import SelectListGroup from '../common/SelectListGroup';
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -31,7 +34,7 @@ class CreateProfile extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <a href="dashboard.html" className="btn btn-light">
+              <a href="/dashboard" className="btn btn-light">
                 Go Back
               </a>
               <h1 className="display-4 text-center">Create Your Profile</h1>
@@ -150,4 +153,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(null)(CreateProfile);
+export default connect(mapStateToProps)(CreateProfile);
