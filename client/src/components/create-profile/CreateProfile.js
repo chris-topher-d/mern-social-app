@@ -30,11 +30,15 @@ class CreateProfile extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({errors: nextProps.errors});
-    }
-  }
+  static getDerivedStateFromProps = nextProps => {
+       return { errors: nextProps.errors };
+   };
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.errors) {
+  //     this.setState({errors: nextProps.errors});
+  //   }
+  // }
 
   onSubmit = (e) => {
     e.preventDefault();
