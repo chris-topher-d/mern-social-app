@@ -134,7 +134,6 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
         ).then(profile => res.json(profile));
       } else {
         // Create profile
-
         // Check if handle exists
         Profile.findOne({ handle: profileInfo.handle })
           .then(profile => {
