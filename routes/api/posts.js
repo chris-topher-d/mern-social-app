@@ -130,7 +130,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false}), (re
 
       // Add to comments array
       post.comments.unshift(newComment);
-      
+
       post.save().then(post => res.json(post));
     })
     .catch(err => res.status(404).json({ postnotfound: 'No post found with that ID'}));
