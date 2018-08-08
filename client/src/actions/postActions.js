@@ -112,6 +112,23 @@ export const addComment = (postId, newComment) => dispatch => {
     );
 }
 
+// Delete Comment
+export const deleteComment = (postId, commentId) => dispatch => {
+  axios.delete(`/api/posts/comment/${postId}/${commentId}`)
+    .then(res =>
+      dispatch({
+        type: GET_POST,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+}
+
 // Set loading state
 export const setPostLoading = () => {
   return {
